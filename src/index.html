@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蔚蓝档案 - 千年科学学园</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- 头部 -->
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon"><img src="./static/img.png"></div>
+                        <div class="logo-text">
+                            <h1>千年科学学园</h1>
+                            <p>Millennium Science School</p>
+                        </div>
+                    </div>
+                    <nav>
+                        <ul>
+                            <li><a href="#">首页</a></li>
+                            <li><a href="#">学院介绍</a></li>
+                            <li><a href="#">学术研究</a></li>
+                            <li><a href="#">学生生活</a></li>
+                            <li><a href="#">招生信息</a></li>
+                            <li><a href="#">联系我们</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- 轮播图 -->
+        <section class="carousel-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>学院风采</h2>
+                </div>
+                <div class="carousel-container">
+                    <div class="carousel">
+                        <div v-for="(slide, index) in slides" :key="index" class="carousel-slide"
+                            :class="{ active: currentSlide === index }"
+                            :style="{ backgroundImage: 'url(' + slide.image + ')' }">
+                            <div class="slide-content">
+                                <h3>{{ slide.title }}</h3>
+                                <p>{{ slide.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-nav">
+                        <button class="carousel-btn" @click="prevSlide">&#10094;</button>
+                        <button class="carousel-btn" @click="nextSlide">&#10095;</button>
+                    </div>
+                    <div class="carousel-controls">
+                        <span v-for="(slide, index) in slides" :key="index" class="carousel-dot"
+                            :class="{ active: currentSlide === index }" @click="goToSlide(index)"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 学院介绍 -->
+        <section class="intro-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>学院介绍</h2>
+                </div>
+                <div class="intro-cards">
+                    <div class="intro-card">
+                        <div class="card-icon">
+                            🎓
+                        </div>
+                        <div class="card-content">
+                            <h3>学院历史</h3>
+                            <p>学院成立时间不如老牌院校，但基沃托斯被冠以“最新锐”或是“最先进”之名的事物，可以说几乎都出自千年。
+                            </p>
+                            <a href="#" class="card-btn">了解更多</a>
+                        </div>
+                    </div>
+                    <div class="intro-card">
+                        <div class="card-icon">
+                            🔬
+                        </div>
+                        <div class="card-content">
+                            <h3>学术研究</h3>
+                            <p>我们的研究领域涵盖人工智能、量子计算、生物科技等前沿科学。学院拥有多个重点实验室和研究中心。</p>
+                            <a href="#" class="card-btn">了解更多</a>
+                        </div>
+                    </div>
+                    <div class="intro-card">
+                        <div class="card-icon">
+                            👥
+                        </div>
+                        <div class="card-content">
+                            <h3>学生社团</h3>
+                            <p>从游戏开发部到工程部社团，我们拥有丰富多样的学生组织，鼓励学生探索兴趣、发展技能并建立终身友谊。</p>
+                            <a href="#" class="card-btn">了解更多</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部 -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <h3>千年科学学园</h3>
+                        <p>基沃托斯最先进的科技教育机构，致力于培养未来的科技创新者与领导者。</p>
+                        <!--<div class="social-links">
+                            <a href="#" class="social-link">f</a>
+                            <a href="#" class="social-link">t</a>
+                            <a href="#" class="social-link">in</a>
+                            <a href="#" class="social-link">ig</a>
+                        </div>-->
+                    </div>
+                    <div class="footer-column">
+                        <h3>快速链接</h3>
+                        <a href="#">学院首页</a>
+                        <a href="#">学术课程</a>
+                        <a href="#">研究项目</a>
+                        <a href="#">校园生活</a>
+                        <a href="#">招生信息</a>
+                    </div>
+                    <div class="footer-column">
+                        <h3>联系我们</h3>
+                        <p>📍 基沃托斯，千年自管区</p>
+                        <p><a href="https://qm.qq.com/q/K3ltARHEYw">🐧 839113994</a></p>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p>&copy; 2025 千年科学学园</p>
+                    <p>注：本网页为玩家二创，与Nexon及其软件作品无任何实质关联。</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                currentSlide: 0,
+                slides: [
+                    {
+                        title: "现代化教学设施",
+                        description: "千年科学学园拥有最先进的教学设备和实验室，为学生提供优质的学习环境。",
+                        image: "./static/clsroom.png"
+                    },
+                    {
+                        title: "丰富多彩的校园生活",
+                        description: "学生社团活动丰富多样，从科技到艺术，满足不同兴趣爱好的学生需求。",
+                        image: "https://webcnstatic.yostar.net/ba_cn_web/prod/upload/wallpaper/qla2kEBs.jpeg"
+                    },
+                    {
+                        title: "学院合作交流",
+                        description: "与Kivotos多所知名高校建立合作关系，为学生提供丰富的国际交流机会。",
+                        image: "./static/street.png"
+                    }
+                ],
+                autoPlay: null
+            },
+            methods: {
+                nextSlide() {
+                    this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+                },
+                prevSlide() {
+                    this.currentSlide = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+                },
+                goToSlide(index) {
+                    this.currentSlide = index;
+                },
+                startAutoPlay() {
+                    this.autoPlay = setInterval(() => {
+                        this.nextSlide();
+                    }, 5000);
+                },
+                stopAutoPlay() {
+                    clearInterval(this.autoPlay);
+                }
+            },
+            mounted() {
+                this.startAutoPlay();
+
+                // 鼠标悬停时暂停自动播放
+                const carousel = document.querySelector('.carousel-container');
+                carousel.addEventListener('mouseenter', this.stopAutoPlay);
+                carousel.addEventListener('mouseleave', this.startAutoPlay);
+            },
+            beforeDestroy() {
+                this.stopAutoPlay();
+            }
+        });
+    </script>
+</body>
+
+</html>
