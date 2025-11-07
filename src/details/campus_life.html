@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生生活 - 千年科学学园</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../static/img.webp">
+    <style>
+        /* 学生生活页面特定样式 */
+        .campus-life-hero {
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .campus-life-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.05"><polygon points="0,0 1000,50 1000,100 0,100"/></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+
+        .campus-life-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .campus-life-hero h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .campus-life-hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .facilities-section {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .facility-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .facility-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .facility-image {
+            height: 200px;
+            background-color: var(--light-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .facility-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .facility-content {
+            padding: 25px;
+        }
+
+        .facility-content h3 {
+            font-size: 22px;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+        }
+
+        .facility-content p {
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .clubs-section {
+            padding: 80px 0;
+            background-color: var(--gray);
+        }
+
+        .clubs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .club-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .club-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .club-icon {
+            height: 150px;
+            background-color: var(--light-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 50px;
+        }
+
+        .club-content {
+            padding: 25px;
+        }
+
+        .club-content h3 {
+            font-size: 22px;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+        }
+
+        .club-content p {
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .activities-section {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .activities-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 50px auto 0;
+        }
+
+        .activities-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent-blue);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            width: 45%;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .timeline-content::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: var(--white);
+            transform: rotate(45deg);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::after {
+            left: -10px;
+        }
+
+        .timeline-content h3 {
+            font-size: 20px;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+        }
+
+        .timeline-content p {
+            color: var(--text-dark);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .campus-life-hero h2 {
+                font-size: 32px;
+            }
+
+            .campus-life-hero p {
+                font-size: 18px;
+            }
+
+            .activities-timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: row !important;
+                justify-content: flex-start;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-content::after {
+                left: -10px !important;
+                right: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 头部 -->
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon"><img src="../static/img.webp" height="40px" width="50px"></div>
+                        <div class="logo-text">
+                            <h1>千年科学学园</h1>
+                            <p>Millennium Science School</p>
+                        </div>
+                    </div>
+                    <nav>
+                        <ul>
+                            <li><a href="../index.html">首页</a></li>
+                            <li><a href="intro.html">学院介绍</a></li>
+                            <li><a href="#">学术研究</a></li>
+                            <li><a href="./campus_life.html" style="color: #a3d2ff;">学生生活</a></li>
+                            <li><a href="join.html">招生信息</a></li>
+                            <li><a href="#">联系我们</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- 校园生活英雄区域 -->
+        <section class="campus-life-hero">
+            <div class="container">
+                <div class="campus-life-hero-content">
+                    <h2>学生生活</h2>
+                    <p>在千年科学学园，我们不仅注重学术成就，更重视学生的全面发展和校园生活体验</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 校园设施 -->
+        <section class="facilities-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>校园设施</h2>
+                </div>
+                <div class="facilities-grid">
+                    <div class="facility-card">
+                        <div class="facility-image">
+                            <div class="image-placeholder">
+                                <i class="fas fa-building"></i>
+                            </div>
+                        </div>
+                        <div class="facility-content">
+                            <h3>千年塔楼</h3>
+                            <p>以研讨会为首，千年中主要的社团和委员会均位于此，是一座巨大的塔楼。搭载了大量最先进的安全设施，严格限制无关人员的出入。</p>
+                        </div>
+                    </div>
+                    <div class="facility-card">
+                        <div class="facility-image">
+                            <div class="image-placeholder">
+                                <i class="fas fa-train"></i>
+                            </div>
+                        </div>
+                        <div class="facility-content">
+                            <h3>单轨电车车站</h3>
+                            <p>可以移动至学园各处的单轨电车车站。千年的单轨电车不仅速度相当快，还几乎没有噪音和摇晃。</p>
+                        </div>
+                    </div>
+                    <div class="facility-card">
+                        <div class="facility-image">
+                            <div class="image-placeholder">
+                                <i class="fas fa-book"></i>
+                            </div>
+                        </div>
+                        <div class="facility-content">
+                            <h3>图书馆</h3>
+                            <p>为千年的学生们的研究和调查而用的图书馆，可以观赏纪录片等影像媒体。</p>
+                        </div>
+                    </div>
+                    <div class="facility-card">
+                        <div class="facility-image">
+                            <div class="image-placeholder">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                        </div>
+                        <div class="facility-content">
+                            <h3>实验中心</h3>
+                            <p>可进行各类工学实验的工科实验室，配备有包括大型3D打印机在内的先进设备。</p>
+                        </div>
+                    </div>
+                    <div class="facility-card">
+                        <div class="facility-image">
+                            <div class="image-placeholder">
+                                <i class="fas fa-server"></i>
+                            </div>
+                        </div>
+                        <div class="facility-content">
+                            <h3>数据中心</h3>
+                            <p>设置有大型服务器和网络线路的数据中心。。</p>
+                        </div>
+                    </div>
+                    <div class="facility-card">
+                        <div class="facility-image">
+                            <div class="image-placeholder">
+                                <i class="fas fa-dumbbell"></i>
+                            </div>
+                        </div>
+                        <div class="facility-content">
+                            <h3>锻炼中心</h3>
+                            <p>因长时间的研究而感到疲惫时，用来活动身体的锻炼中心。使用最尖端的分析设备为学员们提供最优化的训练。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 社团活动 -->
+        <section class="clubs-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>社团活动</h2>
+                </div>
+                <div class="clubs-grid">
+                    <div class="club-card">
+                        <div class="club-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="club-content">
+                            <h3>游戏开发部</h3>
+                            <p>以开发游戏为目的而建立的社团。</p>
+                            <a href="#" class="card-btn">了解更多</a>
+                        </div>
+                    </div>
+                    <div class="club-card">
+                        <div class="club-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="club-content">
+                            <h3>贝里塔斯</h3>
+                            <p>以"守护真理、寻求知识自由"为目标而活动着的黑客团体。目前暂未被承认为社团。</p>
+                            <a href="#" class="card-btn">了解更多</a>
+                        </div>
+                    </div>
+                    <div class="club-card">
+                        <div class="club-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="club-content">
+                            <h3>工程师部</h3>
+                            <p>千年学园中颇为知名的工程部门，拥有着极为出色的机械设备和枪械等的制造、维修和改装能力。。</p>
+                            <a href="#" class="card-btn">了解更多</a>
+                        </div>
+                    </div>
+                    <div class="club-card">
+                        <div class="club-icon">
+                            <i class="fas fa-broom"></i>
+                        </div>
+                        <div class="club-content">
+                            <h3>Cleaning&Clearing</h3>
+                            <p>简称C&C，也称为女仆部，千年学园中特别任务执行小组。</p>
+                            <a href="#" class="card-btn">了解更多</a>
+                        </div>
+                    </div>
+                    <div class="club-card">
+                        <div class="club-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="club-content">
+                            <h3>超现象特务部</h3>
+                            <p>由学生会长指名组建的特殊工作部门，主要负责调查跟踪超级AI"十字神名 (Decagrammaton)"和它的"预言者"们的线索。。</p>
+                            <a href="#" class="card-btn">了解更多</a>
+                        </div>
+                    </div>
+                    <div class="club-card">
+                        <div class="club-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="club-content">
+                            <h3>训练部</h3>
+                            <p>以改善千禧年学员体质而建立的社团。由喜爱锻炼的少女们组成的爱好者团体。</p>
+                            <a href="#" class="card-btn">了解更多</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 年度活动 -->
+        <section class="activities-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>年度活动</h2>
+                </div>
+                <div class="activities-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>科技发明展</h3>
+                            <p>每年春季举行的科技展览，展示学生们的最新发明和创新项目。千年科学学园的前沿发明几乎都出自这里。</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>游戏开发马拉松</h3>
+                            <p>夏季由游戏开发部主办的游戏开发竞赛，吸引了基沃托斯各大学校的参与者。</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>黑客松竞赛</h3>
+                            <p>秋季由贝里塔斯组织的编程马拉松活动，旨在解决基沃托斯面临的各种技术挑战。</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h3>工程创意大赛</h3>
+                            <p>冬季由工程师部主办的创新竞赛，展示学生们在机械工程和武器设计方面的才华。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部 -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <h3>千年科学学园</h3>
+                        <p>基沃托斯最先进的科技教育机构，致力于培养未来的科技创新者与领导者。</p>
+                    </div>
+                    <div class="footer-column">
+                        <h3>快速链接</h3>
+                        <a href="../index.html">学院首页</a>
+                        <a href="intro.html">学院介绍</a>
+                        <a href="#">学术课程</a>
+                        <a href="#">研究项目</a>
+                        <a href="join.html">招生信息</a>
+                    </div>
+                    <div class="footer-column">
+                        <h3>联系我们</h3>
+                        <p>📍 基沃托斯，千年自管区</p>
+                        <p><a href="https://qm.qq.com/q/K3ltARHEYw">🐧 839113994</a></p>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p>&copy; 2025 千年科学学园</p>
+                    <p>注：本网页为玩家二创，与Nexon及其软件作品无任何实质关联。</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                // 可以添加页面特定的Vue数据
+            },
+            methods: {
+                // 可以添加页面特定的Vue方法
+            },
+            mounted() {
+                // 页面加载后的初始化操作
+            }
+        });
+    </script>
+</body>
+
+</html>
