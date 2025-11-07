@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>招生信息 - 千年科学学园</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../static/img.webp">
+    <style>
+        :root {
+            --primary-blue: #1e6fa5;
+            --accent-blue: #4a9fe3;
+            --light-blue: #e6f2ff;
+            --dark-blue: #0d3b66;
+            --white: #ffffff;
+            --gray: #f5f7fa;
+            --text-dark: #333333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: var(--gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 头部样式 */
+        header {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-blue);
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin-left: 25px;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--white);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* 招生信息部分新增样式 */
+        .admission-section {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--dark-blue);
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-blue);
+            border-radius: 2px;
+        }
+
+        .admission-content {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .admission-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: var(--light-blue);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .admission-intro h3 {
+            font-size: 28px;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+        }
+
+        .admission-intro p {
+            font-size: 18px;
+            color: var(--text-dark);
+        }
+
+        .admission-types h3,
+        .admission-process h3,
+        .admission-qa h3 {
+            font-size: 28px;
+            color: var(--dark-blue);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .admission-types h3::after,
+        .admission-process h3::after,
+        .admission-qa h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-blue);
+        }
+
+        .admission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .admission-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .admission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .card-header:hover {
+            background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+        }
+
+        .card-header h4 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .toggle-icon {
+            font-size: 20px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .card-body {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .card-body.open {
+            padding: 25px;
+            max-height: 1000px;
+        }
+
+        .card-body p {
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .card-body ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .card-body li {
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .card-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--accent-blue);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .card-btn:hover {
+            background-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .step {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .step:hover {
+            transform: translateY(-10px);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .step-content h4 {
+            font-size: 20px;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+        }
+
+        .qa-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .qa-item {
+            background-color: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .qa-question {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background-color: var(--light-blue);
+            transition: background 0.3s ease;
+        }
+
+        .qa-question:hover {
+            background-color: #d9e9ff;
+        }
+
+        .qa-question h4 {
+            font-size: 18px;
+            color: var(--dark-blue);
+            margin: 0;
+        }
+
+        .qa-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .qa-answer.open {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        .qa-answer p {
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* 底部样式 */
+        footer {
+            background-color: var(--dark-blue);
+            color: var(--white);
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-blue);
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--white);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background-color: var(--accent-blue);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav li {
+                margin: 5px 10px;
+            }
+
+            .admission-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .card-footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 头部 -->
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon"><img src="../static/img.webp" height="40px" width="50px"></div>
+                        <div class="logo-text">
+                            <h1>千年科学学园</h1>
+                            <p>Millennium Science School</p>
+                        </div>
+                    </div>
+                    <nav>
+                        <ul>
+                            <li><a href="../index.html">首页</a></li>
+                            <li><a href="../index.html#intro">学院介绍</a></li>
+                            <li><a href="../index.html#research">学术研究</a></li>
+                            <li><a href="../index.html#life">学生生活</a></li>
+                            <li><a href="#" class="active">招生信息</a></li>
+                            <li><a href="../index.html#contact">联系我们</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- 招生信息主内容 -->
+        <section class="admission-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>招生信息</h2>
+                </div>
+
+                <div class="admission-content">
+                    <div class="admission-intro">
+                        <h3>欢迎加入千年科学学园</h3>
+                        <p>千年科学学园致力于培养未来的科技创新者与领导者。我们寻找那些对未来科技充满热情、具备创新思维和团队协作精神的学生。</p>
+                    </div>
+
+                    <div class="admission-types">
+                        <h3>招生类别</h3>
+                        <div class="admission-grid">
+                            <div class="admission-card" v-for="(type, index) in admissionTypes" :key="index">
+                                <div class="card-header" @click="toggleCard(index)">
+                                    <h4>{{ type.name }}</h4>
+                                    <span class="toggle-icon">{{ openCards.includes(index) ? '−' : '+' }}</span>
+                                </div>
+                                <div class="card-body" :class="{ open: openCards.includes(index) }">
+                                    <p>{{ type.description }}</p>
+                                    <ul>
+                                        <li v-for="(req, reqIndex) in type.requirements" :key="reqIndex">{{ req }}</li>
+                                    </ul>
+                                    <div class="card-footer">
+                                        <!-- <p><strong>申请截止日期：</strong>{{ type.deadline }}</p>-->
+                                        <a href="https://qm.qq.com/q/K3ltARHEYw" class="card-btn">立即申请</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admission-process">
+                        <h3>申请流程</h3>
+                        <div class="process-steps">
+                            <div class="step" v-for="(step, index) in processSteps" :key="index">
+                                <div class="step-number">{{ index + 1 }}</div>
+                                <div class="step-content">
+                                    <h4>{{ step.title }}</h4>
+                                    <p>{{ step.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admission-qa">
+                        <h3>常见问题</h3>
+                        <div class="qa-list">
+                            <div class="qa-item" v-for="(faq, index) in faqs" :key="index">
+                                <div class="qa-question" @click="toggleFAQ(index)">
+                                    <h4>{{ faq.question }}</h4>
+                                    <span class="toggle-icon">{{ openFAQs.includes(index) ? '−' : '+' }}</span>
+                                </div>
+                                <div class="qa-answer" :class="{ open: openFAQs.includes(index) }">
+                                    <p>{{ faq.answer }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部 -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <h3>千年科学学园</h3>
+                        <p>基沃托斯最先进的科技教育机构，致力于培养未来的科技创新者与领导者。</p>
+                    </div>
+                    <div class="footer-column">
+                        <h3>快速链接</h3>
+                        <a href="../index.html">学院首页</a>
+                        <a href="../index.html#intro">学术课程</a>
+                        <a href="../index.html#research">研究项目</a>
+                        <a href="../index.html#life">校园生活</a>
+                        <a href="#">招生信息</a>
+                    </div>
+                    <div class="footer-column">
+                        <h3>联系我们</h3>
+                        <p>📍 基沃托斯，千年自管区</p>
+                        <p><a href="https://qm.qq.com/q/K3ltARHEYw">🐧 839113994</a></p>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p>&copy; 2025 千年科学学园</p>
+                    <p>注：本网页为玩家二创，与Nexon及其软件作品无任何实质关联。</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                openCards: [],
+                openFAQs: [],
+                admissionTypes: [
+                    {
+                        name: "一般招生",
+                        description: "针对通过基沃托斯普通初中结业水平测试的学生",
+                        requirements: [
+                            "针对通过基沃托斯普通初中结业水平测试的学生",
+                            "在基沃托斯排名靠前",
+                            "有科研创造意向的学生",
+                            "有科学兴趣的学生",
+                            "有科学技能的的学生",
+                        ],
+
+                        applyLink: "#"
+                    },
+
+                    {
+                        name: "交换生项目",
+                        description: "与其他合作院校间的学期交换项目",
+                        requirements: [
+                            "在读学生身份证明",
+                            "所在学校推荐信",
+                            "语言能力证明",
+                            "学习计划书",
+                            "财务担保文件"
+                        ],
+
+                        applyLink: "#"
+                    },
+                    {
+                        name: "特招生",
+                        description: "在初中学业阶段有重大奖项获得或技能突出",
+                        requirements: [
+                            "在读学生身份证明",
+                            "相关领域证书或奖项",
+                            "参加MNPST(千年标准学生能力测试)并取得优异成绩",
+                            "先前对学院有重大贡献",
+                        ],
+
+                        applyLink: "#"
+                    },
+                ],
+                processSteps: [
+                    {
+                        title: "在线申请",
+                        description: "填写完整的在线申请表并上传所需材料"
+                    },
+                    {
+                        title: "资格审查",
+                        description: "我们的招生办公室将审核您的申请材料"
+                    },
+                    {
+                        title: "笔试/测评",
+                        description: "通过资格审查的申请人将收到笔试或测评通知"
+                    },
+
+                    {
+                        title: "录取通知",
+                        description: "最终录取结果将通过邮件和官网公布"
+                    },
+                    {
+                        title: "注册入学",
+                        description: "被录取的学生需在规定时间内完成注册手续"
+                    }
+                ],
+                faqs: [
+                    {
+                        question: "申请费用是多少？",
+                        answer: "所有招生类别的申请均为免费。我们不会向申请人收取任何申请费用，请勿相信任何收费申请渠道。"
+                    },
+                    {
+                        question: "是否提供奖学金？",
+                        answer: "是的，我们为优秀学生提供多种奖学金，包括学业奖学金、科研奖学金和国际交流奖学金等。详情请参阅奖学金页面。"
+                    },
+                    {
+                        question: "申请材料需要认证吗？",
+                        answer: "所有非英文材料都需要经过官方认证翻译。学历证明和成绩单需要加盖学校公章和教务处章。"
+                    }
+                ]
+            },
+            methods: {
+                toggleCard(index) {
+                    const i = this.openCards.indexOf(index);
+                    if (i > -1) {
+                        this.openCards.splice(i, 1);
+                    } else {
+                        this.openCards.push(index);
+                    }
+                },
+                toggleFAQ(index) {
+                    const i = this.openFAQs.indexOf(index);
+                    if (i > -1) {
+                        this.openFAQs.splice(i, 1);
+                    } else {
+                        this.openFAQs.push(index);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
